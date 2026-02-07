@@ -8,6 +8,8 @@ defmodule PlateSlate.Menu.Item do
     field :price, :decimal
     field :added_on, :date
 
+    belongs_to :category, PlateSlate.Menu.Category
+
     timestamps()
   end
 
@@ -16,5 +18,6 @@ defmodule PlateSlate.Menu.Item do
     item
     |> cast(attrs, [:name, :description, :price, :added_on])
     |> validate_required([:name, :price])
+    |> foreign_key_constraint(:category)
   end
 end

@@ -77,7 +77,12 @@ defmodule PlateSlate.MenuTest do
     end
 
     test "create_item/1 with valid data creates a item" do
-      valid_attrs = %{name: "some name", description: "some description", price: "120.5", added_on: ~D[2026-02-06]}
+      valid_attrs = %{
+        name: "some name",
+        description: "some description",
+        price: "120.5",
+        added_on: ~D[2026-02-06]
+      }
 
       assert {:ok, %Item{} = item} = Menu.create_item(valid_attrs)
       assert item.name == "some name"
@@ -92,7 +97,13 @@ defmodule PlateSlate.MenuTest do
 
     test "update_item/2 with valid data updates the item" do
       item = item_fixture()
-      update_attrs = %{name: "some updated name", description: "some updated description", price: "456.7", added_on: ~D[2026-02-07]}
+
+      update_attrs = %{
+        name: "some updated name",
+        description: "some updated description",
+        price: "456.7",
+        added_on: ~D[2026-02-07]
+      }
 
       assert {:ok, %Item{} = item} = Menu.update_item(item, update_attrs)
       assert item.name == "some updated name"
