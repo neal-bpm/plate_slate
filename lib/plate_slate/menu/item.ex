@@ -9,6 +9,7 @@ defmodule PlateSlate.Menu.Item do
     field :added_on, :date
 
     belongs_to :category, PlateSlate.Menu.Category
+    many_to_many :items, PlateSlate.Menu.ItemTag, join_through: "items_taggings"
 
     timestamps()
   end
