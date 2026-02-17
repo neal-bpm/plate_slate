@@ -32,7 +32,12 @@ defmodule PlateSlateWeb.ConnCase do
   end
 
   setup tags do
-    PlateSlate.DataCase.setup_sandbox(tags)
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(PlateSlate.Repo)
+
+    unless tags[:async] do
+      Ecto.Adapters.SQL.Sandbox.mode(PlateSlate.Repo, {:shared, self()})
+    end
+
+    :ok
   end
 end
