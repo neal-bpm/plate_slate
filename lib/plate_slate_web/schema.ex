@@ -4,9 +4,13 @@ defmodule PlateSlateWeb.Schema do
   alias PlateSlate.Menu
 
   object :menu_item do
+    @desc "Unique Id for each menu item"
     field :id, :id
+    @desc "Name of the menu item"
     field :name, :string
+    @desc "Details about the menu"
     field :description, :string
+    @desc "Price of the menu"
     field :price, :float
   end
 
