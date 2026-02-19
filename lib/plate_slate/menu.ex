@@ -7,6 +7,7 @@ defmodule PlateSlate.Menu do
   alias PlateSlate.Repo
 
   alias PlateSlate.Menu.Category
+  alias PlateSlate.Menu.Item
 
   @doc """
   Returns the list of categories.
@@ -102,8 +103,6 @@ defmodule PlateSlate.Menu do
     Category.changeset(category, attrs)
   end
 
-  alias PlateSlate.Menu.Item
-
   @doc """
   Returns the list of items.
 
@@ -116,6 +115,16 @@ defmodule PlateSlate.Menu do
   def list_items do
     Repo.all(Item)
   end
+
+  def list_items(%{matching: name}) do
+    name = "%#{name}%"
+
+    Item
+    |> where([m], ilike(m.name, ^name))
+    |> Repo.all()
+  end
+
+  def list_items(_), do: list_items()
 
   @doc """
   Gets a single item.

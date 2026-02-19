@@ -1,9 +1,7 @@
 defmodule PlateSlateWeb.Schema do
   use Absinthe.Schema
-  import Ecto.Query
 
-  alias PlateSlate.Menu
-  alias PlateSlate.Repo
+  alias PlateSlateWeb.Resolvers
 
   object :menu_item do
     @desc "Unique Id for each menu item"
@@ -21,19 +19,7 @@ defmodule PlateSlateWeb.Schema do
     field :menu_items, list_of(:menu_item) do
       arg(:matching, :string)
 
-      resolve(fn
-        _, %{matching: name}, _ when is_binary(name) ->
-          name = "%#{name}%"
-
-          query =
-            from m in PlateSlate.Menu.Item,
-              where: ilike(m.name, ^name)
-
-          {:ok, Repo.all(query)}
-
-        _, _, _ ->
-          {:ok, Menu.list_items()}
-      end)
+      resolve(&Resolvers.Menu.menu_items/3)
     end
   end
 end
