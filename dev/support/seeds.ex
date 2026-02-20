@@ -7,7 +7,7 @@ defmodule PlateSlate.Seeds do
     # TAGS
     #
 
-    vegetarian =
+    _vegetarian =
       %Menu.ItemTag{name: "Vegetarian"}
       |> Repo.insert!
 
