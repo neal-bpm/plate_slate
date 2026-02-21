@@ -119,19 +119,41 @@ defmodule PlateSlate.Menu do
   def list_items(filters) do
     filters
     |> Enum.reduce(Item, fn
-      {_, nil}, query ->
-        query
-
       {:order, order}, query ->
         from(q in query, order_by: {^order, :name})
 
-      {:matching, name}, query ->
-        from(q in query, where: ilike(q.name, ^"%#{name}%"))
+      {:filter, filter}, query ->
+        query |> filter_with(filter)
     end)
     |> Repo.all()
   end
 
-  def list_items(_), do: list_items()
+  defp filter_with(query, filter) do
+    Enum.reduce(
+      filter,
+      query,
+      fn
+        {:name, name}, query ->
+          from q in query, where: ilike(q.name, ^"%#{name}%")
+
+        {:priced_above, priced_above}, query ->
+          from q in query, where: q.price >= ^priced_above
+
+        {:priced_below, priced_below}, query ->
+          from q in query, where: q.price <= ^priced_below
+
+        {:category, category_name}, query ->
+          from q in query,
+            join: c in assoc(q, :category),
+            where: ilike(c.name, ^"%#{category_name}%")
+
+        {:tag, tag_name}, query ->
+          from q in query,
+            join: t in assoc(q, :tags),
+            where: ilike(t.name, ^"%#{tag_name}%")
+      end
+    )
+  end
 
   @doc """
   Gets a single item.

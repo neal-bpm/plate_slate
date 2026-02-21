@@ -7,7 +7,7 @@ defmodule PlateSlate.Seeds do
     # TAGS
     #
 
-    _vegetarian =
+    vegetarian =
       %Menu.ItemTag{name: "Vegetarian"}
       |> Repo.insert!
 
@@ -41,9 +41,9 @@ defmodule PlateSlate.Seeds do
       %Menu.Item{name: "Bánh mì", price: 4.50, category: sandwiches}
       |> Repo.insert!
 
-    # _vada_pav =
-    #   %Menu.Item{name: "Vada Pav", price: 4.50, category: sandwiches, tags: [vegetarian]}
-    #   |> Repo.insert!
+    _vada_pav =
+      %Menu.Item{name: "Vada Pav", price: 4.50, category: sandwiches, tags: [vegetarian]}
+      |> Repo.insert!
 
     #
     # SIDES

@@ -6,7 +6,9 @@ defmodule PlateSlate.Menu.ItemTag do
     field :name, :string
     field :description, :string
 
-    many_to_many :items, PlateSlate.Menu.Item, join_through: "items_taggings"
+    many_to_many :items, PlateSlate.Menu.Item,
+      join_through: "items_taggings",
+      join_keys: [tag_id: :id, item_id: :id]
 
     timestamps()
   end
