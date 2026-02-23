@@ -24,6 +24,12 @@ defmodule PlateSlateWeb.Schema do
 
     @desc "Priced below a value"
     field :priced_below, :float
+
+    @desc "Added to the menu before this date"
+    field :added_before, :date
+
+    @desc "Added to the menu after this date"
+    field :added_after, :date
   end
 
   object :menu_item do
@@ -33,6 +39,8 @@ defmodule PlateSlateWeb.Schema do
     field :name, :string
     @desc "Details about the menu"
     field :description, :string
+    @desc "Date on menu addition"
+    field :added_on, :date
     @desc "Price of the menu"
     field :price, :float
   end
@@ -44,5 +52,18 @@ defmodule PlateSlateWeb.Schema do
       arg(:order, type: :sort_order, default_value: :asc)
       resolve(&Resolvers.Menu.menu_items/3)
     end
+  end
+
+  scalar :date do
+    parse(fn input ->
+      case Date.from_iso8601(input.value) do
+        {:ok, date} -> {:ok, date}
+        _ -> :error
+      end
+    end)
+
+    serialize(fn date ->
+      Date.to_iso8601(date)
+    end)
   end
 end
