@@ -22,7 +22,6 @@ defmodule PlateSlate.Menu do
     Repo.all(Category)
   end
 
-  
   @doc """
   Gets a single category.
 
@@ -169,10 +168,11 @@ defmodule PlateSlate.Menu do
   end
 
   defp search_ecto(ecto_schema, pattern) do
-    Repo.all from q in ecto_schema,
-      where: ilike(q.name, ^pattern) or ilike(q.description, ^pattern)
+    Repo.all(
+      from q in ecto_schema,
+        where: ilike(q.name, ^pattern) or ilike(q.description, ^pattern)
+    )
   end
-
 
   @doc """
   Gets a single item.

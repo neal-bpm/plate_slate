@@ -19,9 +19,9 @@ defmodule PlateSlateWeb.Schema do
     end
 
     field :search, list_of(:search_result) do
-      arg :matching, non_null(:string)
-      resolve &Resolvers.Menu.search/3
-    end 
+      arg(:matching, non_null(:string))
+      resolve(&Resolvers.Menu.search/3)
+    end
   end
 
   scalar :date do

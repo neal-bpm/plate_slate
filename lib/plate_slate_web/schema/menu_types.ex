@@ -1,7 +1,7 @@
 defmodule PlateSlateWeb.Schema.MenuTypes do
-    use Absinthe.Schema.Notation
+  use Absinthe.Schema.Notation
 
-    @desc "Filtering options for the menu item list"
+  @desc "Filtering options for the menu item list"
   input_object :menu_item_filter do
     @desc "Matching a name"
     field :name, :string
@@ -26,6 +26,7 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
   end
 
   object :menu_item do
+    interfaces([:search_result])
     @desc "Unique Id for each menu item"
     field :id, :id
     @desc "Name of the menu item"
@@ -39,23 +40,27 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
   end
 
   object :category do
+    interfaces([:search_result])
     field :name, :string
     field :description, :string
+
     field :items, list_of(:menu_item) do
-        resolve &PlateSlateWeb.Resolvers.Menu.items_for_category/3
+      resolve(&PlateSlateWeb.Resolvers.Menu.items_for_category/3)
     end
   end
 
-  union :search_result do
-    types [:menu_item, :category]
-    resolve_type fn
-        %PlateSlate.Menu.Item{}, _ ->
-            :menu_item
-        %PlateSlate.Menu.Category{}, _ ->
-            :category
-        _, _ ->
-            nil
-    end
-  end
+  interface :search_result do
+    field :name, :string
 
+    resolve_type(fn
+      %PlateSlate.Menu.Item{}, _ ->
+        :menu_item
+
+      %PlateSlate.Menu.Category{}, _ ->
+        :category
+
+      _, _ ->
+        nil
+    end)
+  end
 end
