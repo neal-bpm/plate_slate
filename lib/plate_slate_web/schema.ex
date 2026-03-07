@@ -24,6 +24,13 @@ defmodule PlateSlateWeb.Schema do
     end
   end
 
+  mutation do
+    field :create_menu_item, :menu_item_result do
+      arg(:input, non_null(:menu_item_input))
+      resolve(&Resolvers.Menu.create_item/3)
+    end
+  end
+
   scalar :date do
     parse(fn input ->
       case Date.from_iso8601(input.value) do
@@ -35,5 +42,23 @@ defmodule PlateSlateWeb.Schema do
     serialize(fn date ->
       Date.to_iso8601(date)
     end)
+  end
+
+  scalar :decimal do
+    parse(fn
+      %{value: value} ->
+        {decimal, _} = Decimal.parse(value)
+        {:ok, decimal}
+
+      _ ->
+        :error
+    end)
+
+    serialize(&to_string/1)
+  end
+
+  object :input_error do
+    field :key, non_null(:string)
+    field :message, non_null(:string)
   end
 end

@@ -25,6 +25,13 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
     field :added_after, :date
   end
 
+  input_object :menu_item_input do
+    field :name, non_null(:string)
+    field :description, :string
+    field :price, non_null(:decimal)
+    field :category_id, non_null(:id)
+  end
+
   object :menu_item do
     interfaces([:search_result])
     @desc "Unique Id for each menu item"
@@ -36,7 +43,12 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
     @desc "Date on menu addition"
     field :added_on, :date
     @desc "Price of the menu"
-    field :price, :float
+    field :price, :decimal
+  end
+
+  object :menu_item_result do
+    field :menu_item, :menu_item
+    field :errors, list_of(:input_error)
   end
 
   object :category do
